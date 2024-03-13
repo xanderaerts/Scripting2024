@@ -40,45 +40,39 @@
 # [[1, 3, 5, 7], [2, 4, 6, 8]] 
 # ```
 
-# %% [markdown]
-# # Code
-# ## Functions
-
 # %%
-def ReadMatrix():
+def read_matrix():
     print("Please input your matrix below")
 
-    startInput = input().split()
     matrix = []
-    matrix.append(startInput)
+    raw = input()
 
-    if(len(startInput) == 2):
-        for i in range (0,2):
-            matrix.append(input().split())
-    elif(len(startInput) == 3):
-        for i in range (0,1):
-            matrix.append(input().split())
+    while raw != "":
+        matrix.append([int(i) for i in raw.split()])
+        raw = input()
     return matrix
 
 # %%
-def scalar_multiplications(matrix, scalar): 
-    multipyMatrix = matrix
+def scalar_multiplication(matrix, scalar): 
+    multipyMatrix = []
 
     for row in matrix:
+        newRow = []
         for col in row:
-            multipyMatrix[row][col] = int(matrix[row][col]) * scalar
+            newRow.append(col* scalar)
+        multipyMatrix.append(newRow)
 
     return multipyMatrix 
 
 # %%
-def Transposition(matrix):
+def transpose(matrix):
     transMaxtrix = []
 
-    for row in matrix:
-        for col in row:
-            #matrix[i][j] = matrix[j][i]
-            print(matrix[row][col])
-
+    for i in range(len(matrix[0])):
+        newrow = []
+        for j in range( len(matrix)):
+            newrow.append(matrix[j][i])
+        transMaxtrix.append(newrow)
     return transMaxtrix 
 
 # %% [markdown]
@@ -86,21 +80,17 @@ def Transposition(matrix):
 
 # %%
 if __name__ == "__main__":
-    matrix = ReadMatrix()
-
+    matrix = read_matrix()
     print("Your matrix:")
     print(matrix)
 
     scalar = 8
 
-    newmatrix = scalar_multiplications(matrix, scalar)
+    newmatrix = scalar_multiplication(matrix, scalar)
     print("Scalar multiplication with 8:")
     print(newmatrix)
 
-    print(matrix)
-
-
-    transMatrix = Transposition(matrix)
+    transMatrix = transpose(matrix)
     print("Transposition:")
     print(transMatrix)
 

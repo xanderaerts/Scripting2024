@@ -1,0 +1,1 @@
+[{'joke': 'Where do pirates get their hooks? Second hand stores.'}]

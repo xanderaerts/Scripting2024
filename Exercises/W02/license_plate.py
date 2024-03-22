@@ -95,7 +95,7 @@ def forbidden(plate):
 
     list = re.findall(regex,plate)
 
-    if len(list > 0):
+    if len(list) > 0:
         if list[0] in forbidden_combinations:
             return True 
 
@@ -161,11 +161,11 @@ def check(plate):
         output += "special plate"
 
         if plate_parts[0] == "A" and int(plate_parts[1]) > 0:
-            return output + " - "  +"official"
+            return output + " - "  +"official (vehicles)"
         
         regex = r"CD-[A-Z]{2}[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "diplomat"
+            return output + " - " + "diplomat (vehicles)"
         
         output = "standard plate"
         
@@ -183,27 +183,27 @@ def check(plate):
 
         regex = r"G-L[A-Z]{2}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "agriculture"
+            return output + " - " + "agriculture (vehicles)"
 
         regex = r"M-[A-Z]{3}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "motorcycle"
+            return output + " - " + "motorcycle(s)"
         
         regex = r"O-[A-Z]{3}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "oldtimer"
+            return output + " - " + "oldtimer(s)"
         
         regex = r"Q-[A-Z]{3}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "trailer"
+            return output + " - " + "trailer(s)"
         
         regex = r"T-X[A-Z]{2}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "taxi"
+            return output + " - " + "taxi(s)"
 
         regex = r"Y-[A-Z]{3}-[1-9]{3}"
         if re.match(regex,plate):
-            return output + " - " + "test"
+            return output + " - " + "test(drives)"
 
         regex = r"[1-9]-[A-Z]{3}-[1-9]{3}"
         if re.match(regex,plate):
@@ -221,51 +221,52 @@ def ascii(plate):
 
 # %%
 def nato(plate):
-    print(alpha.read(plate))
+    return alpha.read(plate)
 
 # %%
 def morse(plate):
     s = ""
     for c in plate: 
         match c: 
-            case 'A': s += ". _ "
-            case 'B': s += "_ . . "
-            case 'C': s += "_ . _ . "
-            case 'D': s += "_ . . "
-            case 'E': s += ". "
-            case 'F': s += ". . _ . "
-            case 'G': s += "_ _ . "
-            case 'H': s += ". . . . "
-            case 'I': s += ". . "
-            case 'J': s += ". _ _ _ "
-            case 'K': s += "_ . _ "
-            case 'L': s += ". _ . . "
-            case 'M': s += "_ _ "
-            case 'N': s += "_ . "
-            case 'O': s += "_ _ _ "
-            case 'P': s += ". _ _ . "
-            case 'Q': s += "_ _ . _ "
-            case 'R': s += ". _ . "
-            case 'S': s += ". . . "
-            case 'T': s += "_ "
-            case 'U': s += ". . _ "
-            case 'V': s += ". . . _ "
-            case 'W': s += ". _ _ "
-            case 'X': s += "_ . . _ "
-            case 'Y': s += "_ . _ _ "
-            case 'Z': s += "_ _ . . "
-            case '1': s += ". _ _ _ _ "
-            case '2': s += ". . _ _ _ "
-            case '3': s += ". . . _ _ "
-            case '4': s += ". . . . _ "
-            case '5': s += ". . . . . "
-            case '6': s += "_ . . . . "
-            case '7': s += "_ _ . . . "
-            case '8': s += "_ _ _ . . "
-            case '9': s += "_ _ _ _ . "
-            case '-' | '.': s+= " "
-    print(s)
-
+            case 'A': s += ".-"
+            case 'B': s += "-.."
+            case 'C': s += "-.-."
+            case 'D': s += "-.."
+            case 'E': s += "."
+            case 'F': s += "..-."
+            case 'G': s += "--."
+            case 'H': s += "...."
+            case 'I': s += ".."
+            case 'J': s += ".---"
+            case 'K': s += "-.-"
+            case 'L': s += ".-.."
+            case 'M': s += "--"
+            case 'N': s += "-."
+            case 'O': s += "---"
+            case 'P': s += ".--."
+            case 'Q': s += "--.-"
+            case 'R': s += ".-."
+            case 'S': s += "..."
+            case 'T': s += "-"
+            case 'U': s += "..-"
+            case 'V': s += "...-"
+            case 'W': s += ".--"
+            case 'X': s += "-..-"
+            case 'Y': s += "-.--"
+            case 'Z': s += "--.."
+            case '1': s += ".----"
+            case '2': s += "..---"
+            case '3': s += "...--"
+            case '4': s += "....-"
+            case '5': s += "....."
+            case '6': s += "-...."
+            case '7': s += "--..."
+            case '8': s += "---.."
+            case '9': s += "----."
+            case '-': s += "-....-"
+            case '.': s += ".-.-.-"
+        s += " "
+    return s
 
 # %%
 if __name__ == "__main__":
@@ -277,9 +278,9 @@ if __name__ == "__main__":
     if format == "ascii":
         ascii(plate)
     elif format == "nato":
-        nato(plate)
+        print(nato(plate))
     elif format == "morse":
-        morse(plate)
+        print(morse(plate))
     else:
         print("Wrong format!")
 

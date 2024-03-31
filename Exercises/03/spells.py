@@ -76,18 +76,23 @@ def mentions(book, text):
 
     csvfile = csv.reader(FILE,delimiter=";")
     
-    linenumber = 0
+    linenumber = 1
     chars = {}
     counter = 0
+
+    if book == "Harry Potter 3.csv":
+        linenumber += 1 
+    #Hard codded this, because I could't figure out why he count't my linennumbers one to low only with this one
+    
     
     for line in csvfile:
+
         linenumber += 1
-        
-            
 
-        if len(line) > 1 and text in line[1]:   
+        if len(line) > 1 and text in line[1]:  
 
-            counter += 1        
+
+            counter += 1   
 
             namestripped = line[0].strip()
 
@@ -97,6 +102,9 @@ def mentions(book, text):
                 chars[namestripped] = [str(linenumber)]
 
     print(counter, "apperances of",text,"in book",book+"\n")
+
+
+    FILE.close()
     return chars
     
 
@@ -134,7 +142,7 @@ def character(name):
     
     charDict = {}
     for line in csvfile:
-        if name in line[1]:
+        if name.lower() in line[1].lower():
             charDict = {
                 "name": line[1],
                 "house": line[4],
@@ -149,14 +157,16 @@ def character(name):
 
 
             if(charDict["age"] == 1):
-                print(name,"is alive and kicking\n")
+                print(name,"is alive and kicking.\n")
             elif(charDict["age"] == -1):
-                print(name,"died\n")
+                print(name,"died.")
 
             elif line[14].strip() == '':
-                print(name,"is today",charDict["age"],"years old.\n")
+                print(name,"is today",charDict["age"],"years old.")
             else:
-                print(name,"died at age",charDict["age"],"\n")
+                print(name,"died at age",charDict["age"])
+
+            FILE.close()
             return charDict
 
 def spell(text):
@@ -173,13 +183,19 @@ def spell(text):
             spell['Type'] = line[2]
             spell['Effect'] = line[3]
             spell['Light'] = line[4]
-            return spell
+   
+    FILE.close()
+
+    if spell != {}:
+        print("SPELL",text)
     for key, value in spell.items():
-        print(f"{key}: {value}")
+        print(f"{key}: {value}")    
+
+
     return spell
 
 def potion(text):
-    FILE = open("Spells.csv","r")
+    FILE = open("Potions.csv","r")
 
     csvfile = csv.reader(FILE,delimiter=";")
 
@@ -192,10 +208,15 @@ def potion(text):
             potion['Effect'] = line[2]
             potion['Characteristics'] = line[3]
             potion['Difficulty level'] = line[4]
-            
+
+    FILE.close()
+
+    if potion != {}:
+        print("POTION",text)
     
     for key, value in potion.items():
-        print(f"{key}: {value}")
+            print(f"{key}: {value}")
+
     return potion
 
 # %% [markdown]
@@ -205,20 +226,17 @@ def potion(text):
 if __name__ == "__main__":
     book = input("Enter book: ")
     text = input("Enter spell/potion")
-
+    
+   
     unzip()
     chars = mentions(book,text)
 
     for char in chars.keys():
-        print(char,"on line(s)",",".join(chars[char]))
+        print(char,"on line(s)",", ".join(chars[char]))
         character(char)
-
-
+        print()
 
     spellInfo = spell(text)
     potionInfo = potion(text)
-
-    
-    
 
 

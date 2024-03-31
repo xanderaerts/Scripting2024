@@ -75,17 +75,36 @@ def mentions(book, text):
         FILE = open(book,"r")
 
     csvfile = csv.reader(FILE,delimiter=";")
+
+            
+
     
-    linenumber = 1
+    
+    linenumber = 0
     chars = {}
     counter = 0
 
-    if book == "Harry Potter 3.csv":
-        linenumber += 1 
-    #Hard codded this, because I could't figure out why he count't my linennumbers one to low only with this one
+
+
+    with open(book,"r") as file:
+        for line in file:
+            linenumber += 1
+
+            line = line.split(";")
+
+            if len(line) > 1 and text in line[1]:  
+
+
+                counter += 1   
+
+                namestripped = line[0].strip()
+
+                if(namestripped in chars.keys()):
+                    chars[namestripped].append(str(linenumber))
+                else:
+                    chars[namestripped] = [str(linenumber)]
     
-    
-    for line in csvfile:
+    '''for line in csvfile:
 
         linenumber += 1
 
@@ -99,7 +118,9 @@ def mentions(book, text):
             if(namestripped in chars.keys()):
                 chars[namestripped].append(str(linenumber))
             else:
-                chars[namestripped] = [str(linenumber)]
+                chars[namestripped] = [str(linenumber)]'''
+    # code above reads lines diffrent, and give a wrong count, searched way to long for this :(
+
 
     print(counter, "apperances of",text,"in book",book+"\n")
 

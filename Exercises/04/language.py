@@ -68,7 +68,7 @@ def language(text):
         payload = { "text": text }
         headers = {
             "content-type": "application/json",
-            "X-RapidAPI-Key": "35b2d6a171mshec0a27f365dedc5p1636dajsnffcc0e955bba",
+            "X-RapidAPI-Key": "",
             "X-RapidAPI-Host": "text-analysis12.p.rapidapi.com"
         }
 
@@ -143,7 +143,7 @@ def sentiment(text):
     headers = {
         "content-type": "application/json",
         "Accept": "application/json",
-        "X-RapidAPI-Key": "35b2d6a171mshec0a27f365dedc5p1636dajsnffcc0e955bba",
+        "X-RapidAPI-Key": "",
         "X-RapidAPI-Host": "sentiment-analysis9.p.rapidapi.com"
     }
 
@@ -172,7 +172,7 @@ def translate(text):
 
     headers = {
         "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key":"35b2d6a171mshec0a27f365dedc5p1636dajsnffcc0e955bba" ,
+        "X-RapidAPI-Key":"" ,
         "X-RapidAPI-Host": "text-translator2.p.rapidapi.com"
     }
 

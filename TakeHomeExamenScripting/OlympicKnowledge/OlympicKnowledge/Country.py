@@ -1,0 +1,87 @@
+from imports import *
+
+
+def Country(): 
+    """ Generates a PDF with all medalists water polo from a given country.
+    
+    Parameters: 
+        none
+    Returns: 
+        none
+    """
+    country = input("Give a country: ").lower().strip()
+    
+   
+    url = 'https://countriesnow.space/api/v0.1/countries/flag/images'
+    payload = {
+            "country": country
+    }
+
+    response = requests.post(url, json=payload)
+    text = response.text
+
+    data = json.loads(text)
+    flag = data['data']['flag']
+
+    url = "https://en.wikipedia.org/wiki/List_of_Olympic_medalists_in_water_polo_(men)"
+
+    response = requests.get(url)
+
+    soup = BeautifulSoup(response.text,'html.parser')
+
+    table = soup.find("table",{"class":"wikitable plainrowheaders"})
+
+    rows = table.find_all("tr")
+
+    i = 0
+
+
+    medailles = []
+
+    for row in rows:
+        td = row.find_all("td")
+        if len(td) != 4: continue # to skip rows with no results
+        i += 1
+        
+        counter = 0 
+        # 0 = year of olympics
+        # 1 = gold winner
+        # 2 = zilver winner
+        # 3 = bronze winner
+
+        medaille =  []
+
+        for data in td:
+            if counter == 0:
+                a = data.find("a")
+
+                if(a != None):
+                    yearOlympics = a.text
+                else:
+                    continue
+            
+            a = data.find("a")
+            if a != None:
+                if country in a.text.lower():
+                    playersRaw = data.find_all("a")
+                    players = []
+                    for p in playersRaw:
+                        players.append(p.text)
+                    players[0] = counter # change the country to the counter, so we know later which medialle is won 
+                    players.insert(0,yearOlympics)
+                    medailles.append(players)
+
+            counter += 1
+
+
+    for m in medailles:
+        print(m)
+
+
+
+    
+
+
+
+
+Country()

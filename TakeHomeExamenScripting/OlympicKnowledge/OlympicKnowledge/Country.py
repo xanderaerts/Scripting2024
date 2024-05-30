@@ -1,4 +1,5 @@
 from imports import *
+import cairosvg
 
 
 def Country(): 
@@ -21,7 +22,21 @@ def Country():
     text = response.text
 
     data = json.loads(text)
-    flag = data['data']['flag']
+    flagURL = data['data']['flag']
+    print(flagURL)
+
+    response = requests.get(flagURL)
+    flag = response.content 
+
+
+    png_data = cairosvg.svg2png(flag)
+
+    flagIMG = "flagimg_" + country + ".png"
+
+    FLAGFILE = open(flagIMG,"wb")
+    FLAGFILE.write(png_data)
+    FLAGFILE.close()
+
 
     url = "https://en.wikipedia.org/wiki/List_of_Olympic_medalists_in_water_polo_(men)"
 
@@ -33,15 +48,11 @@ def Country():
 
     rows = table.find_all("tr")
 
-    i = 0
-
-
     medailles = []
 
     for row in rows:
         td = row.find_all("td")
         if len(td) != 4: continue # to skip rows with no results
-        i += 1
         
         counter = 0 
         # 0 = year of olympics
@@ -74,10 +85,44 @@ def Country():
             counter += 1
 
 
+    # start creating PDF file
+    doc = SimpleDocTemplate(country + "_WaterPolo.pdf",pagesize = letter)
+
+    pdf = []
+
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=26, alignment=1)
+    text_style = ParagraphStyle('BodyText', parent=styles['BodyText'], fontName='Helvetica', fontSize=12, leading=14, alignment=TA_JUSTIFY)
+    bold_style = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=16, leading=14)
+
+    pdf.append(Paragraph(country.capitalize() + " medals in water polo on the olympic games", title_style))
+    pdf.append(Spacer(1,12))
+
+    img = Image(flagIMG,inch,inch)
+    pdf.append(img)
+    pdf.append(Spacer(1,12))
+
+
     for m in medailles:
-        print(m)
+        year = m[0]
 
 
+        if m[1] == 1:
+            text = year + " : " + "GOLD MEDAL"
+        elif m[1] == 2:
+            text = year + " : " + "SILVER MEDAL"
+        elif m[1] == 3:
+            text = year + " : " + "BRONZE MEDAL"
+
+        pdf.append(Paragraph(text,bold_style))
+
+        players = m[2:]  # Assuming players are listed from the 3rd element onwards
+        player_list = ListFlowable([ListItem(Paragraph(player, text_style)) for player in players],
+                                   bulletType='bullet', start='square')
+        pdf.append(player_list)
+
+    doc.build(pdf)
 
     
 

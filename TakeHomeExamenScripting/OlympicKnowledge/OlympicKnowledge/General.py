@@ -18,8 +18,7 @@ def general():
     p = soup.find_all("p")
     description = p[1].text
 
-    url = "https://upload.wikimedia.org/wikipedia/commons/e/e5/WaterPolo.JPG"
-
+    url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/WaterPolo.JPG/1024px-WaterPolo.JPG"
 
     response = requests.get(url)
     waterpoloimg = response.content
@@ -29,7 +28,6 @@ def general():
     imgfile = open(WPimg,"wb")
     imgfile.write(waterpoloimg)
     imgfile.close()
-
 
     url = "https://www.topendsports.com/sport/waterpolo/equipment.htm"
 

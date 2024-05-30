@@ -1,8 +1,4 @@
-import requests
-import json
-from bs4 import BeautifulSoup
-from fpdf import FPDF as PDF
-
+from imports import *
 
 def general(): 
     """ Returns a PDF with all info about Water Polo
@@ -16,7 +12,7 @@ def general():
     url = "https://en.wikipedia.org/wiki/Water_polo" 
 
     response = requests.get(url)
-    soup = BeautifulSoup(response.text,'html.parser') # html.parser to fix a warning s
+    soup = BeautifulSoup(response.text,'html.parser') # html.parser to fix a warning
 
 
     p = soup.find_all("p")
@@ -28,7 +24,9 @@ def general():
     response = requests.get(url)
     waterpoloimg = response.content
 
-    imgfile = open("waterpoloimg.jpg","wb")
+    WPimg = "waterpoloGeneralIMG.jpg"
+
+    imgfile = open(WPimg,"wb")
     imgfile.write(waterpoloimg)
     imgfile.close()
 
@@ -38,54 +36,53 @@ def general():
     response = requests.get(url)
 
     soup = BeautifulSoup(response.text,'html.parser')
-    ul = soup.find_all("ul")
+    ul_elements = soup.find_all("ul")
 
     equipmentList = []
 
-    for li in ul:
-        st = li.find("strong")
-        if(st):
-            equipmentList.append(li.text)
+    for ul in ul_elements:
+        li_elements = ul.find_all('li')
+
+        for li in li_elements:
+            if li.find('strong'):
+                equipmentList.append(li)
+
+    # start creating PDF file
+    doc = SimpleDocTemplate("General_WaterPolo.pdf",pagesize = letter)
+
+    pdf = []
+
+    styles = getSampleStyleSheet()
     
+    title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=26, alignment=1)
+    text_style = ParagraphStyle('BodyText', parent=styles['BodyText'], fontName='Helvetica', fontSize=12, leading=14, alignment=TA_JUSTIFY)
+    bold_style = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=16, leading=14)
 
+    pdf.append(Paragraph("Water polo", title_style))
+    pdf.append(Spacer(1,12))
 
-    
-    pdf = PDF()
-    pdf.add_page()
+    img = Image(WPimg,3*inch,3*inch)
+    pdf.append(img)
+    pdf.append(Spacer(1,12))
 
+    pdf.append(Paragraph(description,text_style))
+    pdf.append(Spacer(1,12))
 
-    pdf.set_font('Arial','B',26)
-    pdf.cell(0,10,"Water polo")
-    pdf.ln()
+    pdf.append(Paragraph("Equipment:",bold_style))
+    pdf.append(Spacer(1,12))
 
-    pdf.image("waterpoloimg.jpg",10,35,75,75)
-
-
-    pdf.set_xy(95,35)
-    pdf.set_font('Arial','',12)
-    pdf.multi_cell(100,5,description,0,'J')
-
-    pdf.set_xy(10,115)
 
     for item in equipmentList:
-        parts = item.split("—")
-
+        item = item.text
+        parts = item.split(" — ")
         name = parts[0].strip()
-        defenition = parts[1].strip()
+        definition = parts[1].strip()
 
-        pdf.set_font('Arial','B',12)
+        pdf.append(Paragraph(f'<b>{name}</b> - {definition}', text_style))
+        pdf.append(Spacer(1, 12))
 
-        pdf.cell(0,10,name,0,0)
-        pdf.set_font('Arial','',12)
-        pdf.multi_cell(20,10,defenition)
-    pdf.ln()
-
-    pdf.output("General_WaterPolo.pdf") 
-
-
-
-
-    
+    doc.build(pdf)
+   
 
 
 general()

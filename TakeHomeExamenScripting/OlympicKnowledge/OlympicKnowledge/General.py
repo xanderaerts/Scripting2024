@@ -1,6 +1,6 @@
 from imports import *
 
-def general(): 
+def General(): 
     """ Returns a PDF with all info about Water Polo
     
     Parameters: 

@@ -1,5 +1,5 @@
 from imports import *
-import cairosvg
+
 import os
 
 def Country(country): 

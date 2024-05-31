@@ -1,6 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import cairosvg
 
 # all import for reportlab
 from reportlab.lib.pagesizes import letter
@@ -18,3 +19,4 @@ text_style = ParagraphStyle('BodyText', parent=styles['BodyText'], fontName='Hel
 bold_style = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=16, leading=14)
 bold_style2 = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=20, leading=14)
 error_style = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=16, leading=14,textColor = colors.red)
+error_style2 = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=12, leading=14,textColor = colors.red)

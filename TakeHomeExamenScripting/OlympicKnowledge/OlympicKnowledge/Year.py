@@ -68,16 +68,6 @@ def Year(year):
     
     doc.build(pdf)
 
-
-
-
-
-
-
-
-
-
-
 def is_olympic_year(year):
     exceptions = {1916, 1940, 1944}
     if year >= 1896 and (year - 1896) % 4 == 0 and year not in exceptions:

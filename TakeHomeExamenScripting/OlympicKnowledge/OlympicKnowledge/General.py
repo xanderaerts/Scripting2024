@@ -1,4 +1,4 @@
-from imports import *
+from .imports import *
 
 def General(): 
     """ Returns a PDF with all info about Water Polo
@@ -8,6 +8,13 @@ def General():
     Returns: 
         none
     """
+
+    doc = SimpleDocTemplate("General_WaterPolo.pdf",pagesize = letter)
+
+    pdf = []
+
+    pdf.append(Paragraph("Water polo", title_style))
+    pdf.append(Spacer(1,12))
 
     url = "https://en.wikipedia.org/wiki/Water_polo" 
 
@@ -19,16 +26,22 @@ def General():
 
     url = "https://upload.wikimedia.org/wikipedia/commons/e/e5/WaterPolo.JPG"
 
+
     response = requests.get(url)
-    waterpoloimg = response.content
 
-    WPimg = "waterpoloGeneralIMG.jpg"
+    if response.status_code == 200:
+        
+        WPimg = "waterpoloGeneralIMG.jpg"
 
-    imgfile = open(WPimg,"wb")
-    imgfile.write(waterpoloimg)
-    imgfile.close()
+        img_path = download_and_save_image(url,WPimg)
 
-    url = "https://www.topendsports.com/sport/waterpolo/equipment.htm"
+        img = Image(img_path,3*inch,3*inch)
+        pdf.append(img)
+        pdf.append(Spacer(1,12))
+    else:
+        pdf.append(Paragraph("Could not load image",error_style))    
+
+    url = "https://www.topendsports.com/sport/waterpolo/equipment.html"
 
     response = requests.get(url)
 
@@ -44,24 +57,7 @@ def General():
             if li.find('strong'):
                 equipmentList.append(li)
 
-    # start creating PDF file
-    doc = SimpleDocTemplate("General_WaterPolo.pdf",pagesize = letter)
 
-    pdf = []
-
-    styles = getSampleStyleSheet()
-    
-    title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=26, alignment=1)
-    text_style = ParagraphStyle('BodyText', parent=styles['BodyText'], fontName='Helvetica', fontSize=12, leading=14, alignment=TA_JUSTIFY)
-    bold_style = ParagraphStyle('Bold', parent=styles['BodyText'], fontName='Helvetica-Bold', fontSize=16, leading=14)
-
-    pdf.append(Paragraph("Water polo", title_style))
-    pdf.append(Spacer(1,12))
-
-    img = Image(WPimg,3*inch,3*inch)
-    pdf.append(img)
-    pdf.append(Spacer(1,12))
-    os.remove(WPimg)
 
     pdf.append(Paragraph(description,text_style))
     pdf.append(Spacer(1,12))
@@ -80,3 +76,5 @@ def General():
         pdf.append(Spacer(1, 12))
 
     doc.build(pdf)
+    if(WPimg):
+        os.remove(img_path)

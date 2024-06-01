@@ -1,5 +1,4 @@
-from Country import scrape_medailles,scrape_flag
-from imports import *
+from .imports import *
 
 def Athlete(name):
 
@@ -49,9 +48,7 @@ def Athlete(name):
             img = Image(imgFile,inch,inch)
             pdf.append(img)
             pdf.append(Spacer(1,12))
-            os.remove(imgFile)
         except:
-            os.remove(imgFile)
             pdf.append(Paragraph("Could not find any image.",error_style2))
             
             
@@ -106,3 +103,5 @@ def Athlete(name):
         pdf.append(Paragraph(f"Could not find the current athlete:{name}",error_style))
 
     doc.build(pdf)
+    if(imgFile):
+        os.remove(imgFile)

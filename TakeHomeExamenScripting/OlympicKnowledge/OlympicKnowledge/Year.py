@@ -1,11 +1,10 @@
-from Country import scrape_medailles,scrape_flag
-from imports import *
+from .imports import *
 
 def Year(year):
-
     yearsList = []
 
     if len(year.strip()) == 4:
+        year = str(year)
         yearsList.append(year)
 
     elif len(year.strip()) > 4:
@@ -33,6 +32,8 @@ def Year(year):
 
     titleyear = ""
 
+    downloadedFlags = []
+
     for m in medailles:
         yearPlace = m[0]
         currentYear = yearPlace[:4]
@@ -53,10 +54,13 @@ def Year(year):
 
             flagIMG =  scrape_flag(m[2],pdf)
             if flagIMG != None:
-                img = Image(flagIMG,inch/2,inch/2)
-                pdf.append(img)
+                try:
+                    img = Image(flagIMG,inch/2,inch/2)
+                    pdf.append(img)
+                    if flagIMG not in downloadedFlags: downloadedFlags.append(flagIMG)
+                except:
+                    pdf.append(Paragraph("Could not load flag",error_style2))
 
-                os.remove(flagIMG)
 
             pdf.append(Paragraph(text,bold_style))
 
@@ -66,9 +70,17 @@ def Year(year):
             pdf.append(player_list)
     
     doc.build(pdf)
+    
+
+    for flag in downloadedFlags:
+        if(flag):
+            os.remove(flag)
+
 
 def is_olympic_year(year):
     exceptions = {1916, 1940, 1944}
     if year >= 1896 and (year - 1896) % 4 == 0 and year not in exceptions:
         return True
     return False
+
+

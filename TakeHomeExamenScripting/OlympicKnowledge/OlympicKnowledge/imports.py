@@ -2,6 +2,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import cairosvg
+import os
 
 # all import for reportlab
 from reportlab.lib.pagesizes import letter

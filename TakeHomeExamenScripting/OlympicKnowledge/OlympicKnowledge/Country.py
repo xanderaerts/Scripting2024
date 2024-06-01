@@ -24,6 +24,7 @@ def Country(country):
         img = Image(flagIMG,inch,inch)
         pdf.append(img)
         pdf.append(Spacer(1,12))
+        os.remove(flagIMG)
     else:
         pdf.append(Paragraph("Couldn't download flag",error_style))
    
@@ -150,7 +151,3 @@ def scrape_flag(country,pdf):
 
         return flagIMG
         
-
-
-
-Country("france")

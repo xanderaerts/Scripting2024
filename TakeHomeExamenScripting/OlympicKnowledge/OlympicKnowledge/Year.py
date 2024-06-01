@@ -29,9 +29,6 @@ def Year(year):
     pdf.append(Paragraph(year + " medals in water polo on the olympic games", title_style))
     pdf.append(Spacer(1,12))
 
-
-
-
     medailles = scrape_medailles(pdf)
 
     titleyear = ""
@@ -59,6 +56,8 @@ def Year(year):
                 img = Image(flagIMG,inch/2,inch/2)
                 pdf.append(img)
 
+                os.remove(flagIMG)
+
             pdf.append(Paragraph(text,bold_style))
 
             players = m[3:]
@@ -73,5 +72,3 @@ def is_olympic_year(year):
     if year >= 1896 and (year - 1896) % 4 == 0 and year not in exceptions:
         return True
     return False
-
-Year("2000-2020")

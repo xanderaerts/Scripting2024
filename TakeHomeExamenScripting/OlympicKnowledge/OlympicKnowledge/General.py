@@ -14,7 +14,6 @@ def General():
     response = requests.get(url)
     soup = BeautifulSoup(response.text,'html.parser') # html.parser to fix a warning
 
-
     p = soup.find_all("p")
     description = p[1].text
 
@@ -62,6 +61,7 @@ def General():
     img = Image(WPimg,3*inch,3*inch)
     pdf.append(img)
     pdf.append(Spacer(1,12))
+    os.remove(WPimg)
 
     pdf.append(Paragraph(description,text_style))
     pdf.append(Spacer(1,12))
@@ -80,7 +80,3 @@ def General():
         pdf.append(Spacer(1, 12))
 
     doc.build(pdf)
-   
-
-
-General()
